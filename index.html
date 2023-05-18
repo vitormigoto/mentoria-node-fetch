@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>      
+        
+        //Funçoes que Executam Ações
+        function separa_nome(primeiro,segundo){
+            let txt_primeira = document.getElementById("primeiro_nome");
+            let txt_segunda = document.getElementById("segundo_nome");
+            txt_primeira.value = primeiro;
+            txt_segunda.value = segundo;
+        }
+
+        function apagar(){ 
+            document.getElementById("primeiro_nome").value="";
+            document.getElementById("segundo_nome").value="";
+            document.getElementById("palavra").value = "";
+        }
+
+        //Funcoes que Retornam Valores
+
+        function conta_letras(palavra){
+            
+            return palavra.length;
+        }
+
+        function valida_palavra(){ 
+            let minha_palavra = document.getElementById("palavra").value;
+            let num_letras = conta_letras(minha_palavra);
+
+            alert(num_letras)
+        }
+
+        async function getUsers() {
+
+            const response = await fetch("http://localhost:3000/usuarios/");
+            const jsonData = await response.json();
+            let lista = document.getElementById("dados")
+            lista.innerHTML = "";
+            jsonData.forEach(element => {
+                lista.innerHTML += `<li>${element.nome}</li>`;                    
+            });
+        }
+
+        async function insertUser() {
+            let user_id = document.getElementById("user_id").value;
+            let user_name = document.getElementById("user_nome").value;
+            const json_body = {
+                "id": user_id,
+                "nome": user_name
+            }
+            const response = await fetch("http://localhost:3000/usuarios/",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(json_body)
+            });
+            getUsers();
+        }
+
+    </script>
+</head>
+<body>
+
+    <input id="primeiro_nome" type="text" value="0">
+    <input id="segundo_nome" type="text" value="0">
+    <button onclick="separa_nome('Vitor','Migoto')">Separa Nomes</button>
+
+    <p><hr></p>
+
+    <input id="palavra" type="text">
+    <button onclick="valida_palavra()">Exibir número de letras</button>
+
+    <p><hr></p>
+    <button onclick="apagar()">Limpar</button>
+
+    <p><hr></p>
+    <ul id="dados">
+
+    </ul>
+    <button onclick="getUsers()">Ler API</button>
+
+    <br>
+    <input id="user_id" type="text" value="0">
+    <input id="user_nome" type="text" value="0">
+    <button onclick="insertUser()">Inserir Nome</button>
+    
+</body>
+</html>
